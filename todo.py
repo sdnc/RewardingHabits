@@ -39,7 +39,7 @@ for todo in todos:
     my_list.insert(END, todo)
 
 # Create srcollbar
-my_scrollbar = Scrollbar(my_frame)
+my_scrollbar = Scrollbar(my_frame, bg="#000000")
 my_scrollbar.pack(side=RIGHT, fill=BOTH)
 
 # Add scrollbar
@@ -56,16 +56,35 @@ button_frame.pack(pady=20)
 
 # BUTTON FUNCTIONALITY
 def delete_item():
-    pass
+    my_list.delete(ANCHOR) # ANCHOR targets whatever is highlighted
 
 def add_item():
-    pass
+    my_list.insert(END, my_entry.get())
+    my_entry.delete(0, END)
 
 def cross_off_item():
-    pass
+    # Cross off item
+    my_list.itemconfig(
+        my_list.curselection(),
+        fg="#dedede")
+    # Get rid of selection bar
+    my_list.selection_clear(0, END)
 
 def uncross_item():
-    pass
+        # Cross off item
+    my_list.itemconfig(
+        my_list.curselection(),
+        fg="#464646")
+    # Get rid of selection bar
+    my_list.selection_clear(0, END)
+
+def delete_crossed():
+    idx = 0 # Start with first list item
+    while idx < my_list.size(): # loop through available list items
+        if my_list.itemcget(idx, "fg") == "#dedede":
+            my_list.delete(my_list.index(idx))  
+
+        idx += 1
 
 
 # Add buttons
@@ -73,10 +92,13 @@ delete_button = Button(button_frame, text="Delete Item", command=delete_item)
 add_button = Button(button_frame, text="Add Item", command=add_item)
 cross_off_button = Button(button_frame, text="Cross off Item", command=cross_off_item)
 uncross_button = Button(button_frame, text="Uncross Item", command=uncross_item)
+delete_crossed_button = Button(button_frame, text="Delete Completed Tasks", command=delete_crossed)
 
 delete_button.grid(row=0, column=0)
 add_button.grid(row=0, column=1, padx=20)
 cross_off_button.grid(row=0, column=2)
 uncross_button.grid(row=0, column=3, padx=20)
+delete_crossed_button.grid(row=0, column=4)
+
 
 root.mainloop()
